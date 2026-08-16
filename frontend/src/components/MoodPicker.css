@@ -1,0 +1,32 @@
+.mood-picker {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.mood-btn {
+  font-size: 22px;
+  background: none;
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  padding: 4px 6px;
+  transition: all var(--transition);
+  line-height: 1;
+  filter: grayscale(0.3);
+  opacity: 0.7;
+}
+
+.mood-btn:hover {
+  transform: scale(1.2);
+  filter: grayscale(0);
+  opacity: 1;
+}
+
+.mood-btn.selected {
+  border-color: var(--accent);
+  background: rgba(99,102,241,0.12);
+  filter: grayscale(0);
+  opacity: 1;
+  transform: scale(1.1);
+}

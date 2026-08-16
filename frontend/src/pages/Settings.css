@@ -1,0 +1,41 @@
+.settings-page { display: flex; flex-direction: column; gap: 24px; }
+
+.settings-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.settings-section { padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+
+.settings-section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--accent-light);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.settings-section-header svg { flex-shrink: 0; }
+
+.settings-row {
+  padding: 12px 0;
+  border-top: 1px solid var(--glass-border);
+}
+
+.settings-label { font-size: 12px; color: var(--text-muted); margin-bottom: 3px; }
+.settings-value { font-size: 15px; color: var(--text-primary); }
+
+.settings-privacy-note {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  padding: 14px;
+  background: rgba(99,102,241,0.06);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--glass-border);
+}
+
+.settings-export-note { font-size: 13px; color: var(--text-muted); }
+.settings-export-buttons { display: flex; gap: 12px; flex-wrap: wrap; }

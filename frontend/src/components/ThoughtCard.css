@@ -1,0 +1,135 @@
+.thought-card {
+  padding: 18px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  transition: transform var(--transition), border-color var(--transition);
+}
+
+.thought-card:hover {
+  border-color: rgba(99,102,241,0.25);
+}
+
+.thought-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.thought-time-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.thought-clock-icon { color: var(--accent-light); }
+
+.thought-time {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent-light);
+  letter-spacing: 0.02em;
+}
+
+.thought-mood {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.thought-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  opacity: 0.5;
+  transition: opacity var(--transition);
+}
+
+.thought-card:hover .thought-card-actions {
+  opacity: 1;
+}
+
+.btn-icon-subtle {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 5px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition);
+}
+
+.btn-icon-subtle:hover {
+  color: var(--text-primary);
+  background: var(--glass-hover);
+}
+
+.btn-icon-subtle.danger:hover {
+  color: var(--error);
+  background: rgba(239,68,68,0.12);
+}
+
+.thought-card-body {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.65;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.thought-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* Editing state */
+.thought-card.editing {
+  border-color: var(--accent);
+}
+
+.thought-edit-actions { display: flex; align-items: center; gap: 6px; }
+
+.btn.small {
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+.btn.icon-btn.small {
+  padding: 6px;
+}
+
+.thought-edit-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.thought-edit-textarea {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  padding: 10px 14px;
+  outline: none;
+  resize: vertical;
+}
+
+.thought-edit-textarea:focus {
+  border-color: var(--accent);
+}
+
+.thought-edit-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}

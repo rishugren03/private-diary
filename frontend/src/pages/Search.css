@@ -1,0 +1,64 @@
+.search-page { display: flex; flex-direction: column; gap: 24px; }
+
+.search-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 600;
+}
+.search-sub { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+.search-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+}
+.search-icon { color: var(--text-muted); flex-shrink: 0; }
+.search-input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: 16px;
+  color: var(--text-primary);
+}
+.search-input::placeholder { color: var(--text-muted); }
+
+.search-results { display: flex; flex-direction: column; gap: 12px; }
+.search-empty { color: var(--text-muted); font-size: 14px; text-align: center; padding: 40px 0; }
+
+.search-card {
+  padding: 20px 24px;
+  cursor: pointer;
+  transition: background var(--transition), transform var(--transition);
+}
+.search-card:hover {
+  background: rgba(99,102,241,0.08);
+  transform: translateY(-1px);
+}
+.search-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.search-card-date { font-size: 13px; font-weight: 600; color: var(--accent-light); }
+.search-card-mood { font-size: 18px; }
+.search-card-preview {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.search-card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+
+mark.search-highlight {
+  background: rgba(99,102,241,0.25);
+  color: var(--accent-light);
+  border-radius: 2px;
+  padding: 0 2px;
+}
