@@ -114,3 +114,5 @@ async function connectDB() {
 }
 
 connectDB();
+
+export default app;
