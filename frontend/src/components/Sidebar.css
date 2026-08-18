@@ -1,7 +1,4 @@
-/* ══════════════════════════════════════════════════════════════
-   Sidebar — Stitched Antique Leather Book Spine
- ══════════════════════════════════════════════════════════════ */
-
+/* Desktop: sidebar always visible in normal flow */
 .sidebar {
   width: 250px;
   height: 100vh;
@@ -12,9 +9,60 @@
   padding: 0;
   flex-shrink: 0;
   overflow-y: auto;
-  position: relative;
   box-shadow: 6px 0 25px rgba(0,0,0,0.45);
+  transition: transform var(--transition);
 }
+
+/* Mobile: sidebar is a fixed off-canvas drawer */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 1000;
+    transform: translateX(-100%);
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+}
+
+/* Only show backdrop and close button on mobile */
+.sidebar-backdrop {
+  display: none;
+}
+@media (max-width: 768px) {
+  .sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 900;
+  }
+  .sidebar-backdrop.open {
+    display: block;
+  }
+}
+
+/* Close button: only visible in mobile drawer */
+.sidebar-close-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-gold);
+  cursor: pointer;
+  padding: 4px;
+}
+@media (max-width: 768px) {
+  .sidebar-close-btn {
+    display: flex;
+  }
+}
+/* Light mode text adjustments */
+:root[data-theme="light"] .sidebar-link {
+  color: var(--text-primary);
+}
+
 
 /* Stitched Leather edge detail */
 .sidebar::after {
@@ -32,15 +80,21 @@
 .sidebar-logo {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  padding: 20px 20px;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.18);
+}
+
+.sidebar-logo-brand {
+  display: flex;
+  align-items: center;
   gap: 10px;
-  padding: 24px 20px;
   color: var(--text-gold);
   font-family: var(--font-title);
   font-size: 16px;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  border-bottom: 1px solid rgba(212, 175, 55, 0.18);
   text-shadow: 0 1px 2px rgba(0,0,0,0.8);
 }
 
@@ -48,6 +102,7 @@
   color: var(--gold-foil);
   filter: drop-shadow(0 1px 2px rgba(0,0,0,0.6));
 }
+
 
 .sidebar-nav {
   display: flex;
@@ -140,6 +195,7 @@
   margin-top: 3px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -222,4 +278,7 @@
   transition: all var(--transition);
   flex-shrink: 0;
 }
-.sidebar-logout:hover { color: var(--error); background: rgba(156,58,46,0.15); }
+.sidebar-logout:hover {
+  color: var(--error);
+  background: rgba(156,58,46,0.15);
+}
