@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const api = axios.create({ baseURL: '/api' });
+const api = axios.create({ baseURL: 'https://private-diary.onrender.com/api' });
 
 // Attach JWT token from localStorage to every request
 api.interceptors.request.use((config) => {
