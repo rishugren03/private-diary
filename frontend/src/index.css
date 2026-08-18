@@ -1,7 +1,9 @@
-/* ═══════════════════════════════════════════════
-   Memoria — Global Design System
-   Dark glassmorphism theme
- ═══════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════
+   Memoria — Authentic Classic Physical Journal Design System
+   Leather-bound notebook, lined parchment paper, iron-gall ink
+ ══════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=IM+Fell+English:ital@0;1&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Caveat:wght@400;500;600;700&family=Dancing+Script:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap');
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -10,44 +12,115 @@
 }
 
 :root {
-  /* Fonts */
-  --font-sans:     'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-display:  'Outfit', 'Plus Jakarta Sans', sans-serif;
-  --font-serif:    'Playfair Display', Georgia, serif;
+  /* ── Vintage Physical Typography ──────────────────────────── */
+  --font-title:   'Cinzel', 'Playfair Display', serif;
+  --font-display: 'IM Fell English', 'Playfair Display', Georgia, serif;
+  --font-serif:   'Lora', Georgia, serif;
+  --font-hand:    'Caveat', 'Dancing Script', cursive;
+  --font-sans:    'Plus Jakarta Sans', sans-serif;
 
-  /* Colors */
-  --bg-base:        #070b14;
-  --bg-surface:     #0e1525;
-  --bg-elevated:    #141d30;
-  --glass-bg:       rgba(20, 29, 48, 0.7);
-  --glass-border:   rgba(99, 102, 241, 0.15);
-  --glass-hover:    rgba(99, 102, 241, 0.08);
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
 
-  /* Accent */
-  --accent:         #6366f1;
-  --accent-light:   #818cf8;
-  --accent-glow:    rgba(99, 102, 241, 0.3);
-
-  /* Text */
-  --text-primary:   #e2e8f0;
-  --text-secondary: #94a3b8;
-  --text-muted:     #475569;
-  --text-accent:    #818cf8;
-
-  /* Status */
-  --success:  #10b981;
-  --warning:  #f59e0b;
-  --error:    #ef4444;
-
-  /* Spacing */
-  --radius-sm:  8px;
-  --radius-md:  12px;
-  --radius-lg:  18px;
-  --radius-xl:  24px;
-
-  /* Transitions */
-  --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition:      0.2s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ─── Day Mode: Classic Aged Parchment Journal ────────────── */
+:root,
+:root[data-theme="light"] {
+  /* Desk & leather background */
+  --bg-desk:         #2B1A10;   /* deep mahogany wooden desk */
+  --bg-spine:        #3E2718;   /* dark leather spine */
+  --bg-spine-border: #563722;
+  
+  /* Lined Paper Page background */
+  --bg-base:         #F3EEDD;   /* aged warm parchment paper */
+  --bg-surface:      #EBE4D0;   /* paper surface */
+  --bg-elevated:     #E3DAC5;   /* stacked paper / card sheet */
+  --bg-hover:        #DDD3BB;
+  --bg-inset:        #FAF6EA;   /* writing paper inset */
+
+  /* Leather & Gold Accents */
+  --leather:         #5A3821;
+  --leather-light:   #8C5535;
+  --gold-foil:       #B8860B;   /* aged brass / gold foil header */
+  --gold-glow:       rgba(184, 134, 11, 0.25);
+  
+  /* Ink Colors */
+  --accent:          #6B3E26;   /* warm leather sepia ink */
+  --accent-light:    #8C5535;
+  --accent-dark:     #422513;
+  --accent-glow:     rgba(107, 62, 38, 0.18);
+
+  --text-primary:    #2A2118;   /* deep vintage iron-gall ink */
+  --text-secondary:  #5A4938;   /* aged medium ink */
+  --text-muted:      #8C7662;   /* faded pencil / ink */
+  --text-accent:     #6B3E26;
+  --text-on-dark:    #F3EEDD;
+  --text-gold:       #D4AF37;   /* gold embossed text */
+
+  /* Rule lines on notebook paper */
+  --margin-line:     rgba(195, 75, 60, 0.45);   /* vertical red notebook margin line */
+  --rule-line:       rgba(80, 110, 140, 0.14);  /* horizontal notebook blue lines */
+  --paper-shadow:    0 4px 20px rgba(25, 15, 8, 0.20), inset 0 0 40px rgba(120, 90, 50, 0.08);
+  --glass-border:    rgba(100, 70, 45, 0.22);
+  --glass-hover:     rgba(100, 70, 45, 0.08);
+
+  --success: #3F6E49;
+  --warning: #9C7225;
+  --error:   #9C3A2E;
+
+  --overlay-bg: rgba(43, 26, 16, 0.72);
+}
+
+/* ─── Night Mode: Dark Candlelight Leather Desk ──────────── */
+:root[data-theme="dark"] {
+  /* Desk & leather background */
+  --bg-desk:         #120D09;   /* midnight desk */
+  --bg-spine:        #1B130D;   /* dark antique leather spine */
+  --bg-spine-border: #2D2016;
+
+  /* Paper Page background at candlelight */
+  --bg-base:         #1D1712;   /* warm dark parchment */
+  --bg-surface:      #261E17;   /* dark paper surface */
+  --bg-elevated:     #2F261E;   /* stacked dark paper */
+  --bg-hover:        #3B3026;
+  --bg-inset:        #211A13;   /* dark writing inset */
+
+  /* Leather & Gold Accents */
+  --leather:         #8C5535;
+  --leather-light:   #B87349;
+  --gold-foil:       #D4A359;   /* candlelight amber gold */
+  --gold-glow:       rgba(212, 163, 89, 0.25);
+
+  /* Ink Colors */
+  --accent:          #C89456;   /* warm candlelight amber */
+  --accent-light:    #DBA96C;
+  --accent-dark:     #8C5D2C;
+  --accent-glow:     rgba(200, 148, 86, 0.22);
+
+  --text-primary:    #EAE0D0;   /* warm cream manuscript text */
+  --text-secondary:  #BCAE9B;   /* parchment body text */
+  --text-muted:      #827361;   /* muted ink */
+  --text-accent:     #DBA96C;
+  --text-on-dark:    #1D1712;
+  --text-gold:       #E5C178;
+
+  /* Rule lines on dark notebook paper */
+  --margin-line:     rgba(180, 75, 60, 0.35);   /* vertical reddish margin line */
+  --rule-line:       rgba(180, 140, 90, 0.08);  /* horizontal rule lines */
+  --paper-shadow:    0 8px 30px rgba(0, 0, 0, 0.60), inset 0 0 50px rgba(0, 0, 0, 0.40);
+  --glass-border:    rgba(180, 140, 90, 0.18);
+  --glass-hover:     rgba(180, 140, 90, 0.08);
+
+  --success: #6A9E58;
+  --warning: #C89C38;
+  --error:   #B84A3A;
+
+  --overlay-bg: rgba(12, 8, 5, 0.85);
 }
 
 html, body, #root {
@@ -56,99 +129,123 @@ html, body, #root {
 }
 
 body {
-  font-family: var(--font-sans);
-  background-color: var(--bg-base);
+  font-family: var(--font-serif);
+  background-color: var(--bg-desk);
   color: var(--text-primary);
-  line-height: 1.6;
+  line-height: 1.68;
   -webkit-font-smoothing: antialiased;
   overflow: hidden;
+  transition: background-color var(--transition-slow), color var(--transition-slow);
 }
 
-/* Scrollbar */
+/* ─── Scrollbar ───────────────────────────────── */
 ::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 3px; }
+::-webkit-scrollbar-track { background: var(--bg-surface); }
+::-webkit-scrollbar-thumb { background: rgba(100,70,45,0.30); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
-/* ─── Glass Card ─────────────────────────────── */
-.glass-card {
-  background: var(--glass-bg);
+/* ─── Physical Paper Page Sheet ────────────────── */
+.glass-card,
+.paper-sheet {
+  background: var(--bg-elevated);
   border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--paper-shadow);
+  position: relative;
 }
 
-/* ─── Buttons ─────────────────────────────────── */
+/* Authentic Lined Notebook Page layout utility */
+.ruled-page {
+  background-color: var(--bg-base);
+  background-image:
+    /* Left vertical red margin rule line */
+    linear-gradient(90deg, transparent 48px, var(--margin-line) 48px, var(--margin-line) 50px, transparent 50px),
+    /* Horizontal blue notebook ruling lines */
+    repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent calc(1.75em - 1px),
+      var(--rule-line) calc(1.75em - 1px),
+      var(--rule-line) 1.75em
+    );
+  background-attachment: local;
+}
+
+/* ─── Vintage Leather / Brass Buttons ─────────── */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 10px 20px;
-  border-radius: var(--radius-md);
-  font-family: var(--font-sans);
-  font-size: 14px;
+  padding: 9px 18px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-title);
+  font-size: 13px;
   font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
   cursor: pointer;
   transition: all var(--transition);
-  border: none;
+  border: 1px solid var(--glass-border);
   text-decoration: none;
   white-space: nowrap;
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--accent), #7c3aed);
-  color: #fff;
-  box-shadow: 0 4px 20px var(--accent-glow);
+  background: linear-gradient(180deg, var(--leather-light) 0%, var(--leather) 100%);
+  color: var(--text-on-dark);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
 }
 .btn-primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 28px var(--accent-glow);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+  border-color: var(--gold-foil);
 }
 .btn-primary:active { transform: translateY(0); }
 
 .btn-ghost {
-  background: transparent;
+  background: var(--bg-inset);
   color: var(--text-secondary);
   border: 1px solid var(--glass-border);
 }
 .btn-ghost:hover {
-  background: var(--glass-hover);
+  background: var(--bg-hover);
   color: var(--text-primary);
+  border-color: var(--accent);
 }
 
 .btn-danger {
-  background: rgba(239, 68, 68, 0.15);
+  background: rgba(156,58,46,0.12);
   color: var(--error);
-  border: 1px solid rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(156,58,46,0.30);
 }
-.btn-danger:hover { background: rgba(239, 68, 68, 0.25); }
+.btn-danger:hover { background: rgba(156,58,46,0.22); }
 
 .btn:disabled {
-  opacity: 0.5;
+  opacity: 0.45;
   cursor: not-allowed;
   transform: none !important;
 }
 
-/* ─── Form elements ───────────────────────────── */
+/* ─── Form Inputs (Underlined Writing Rule) ────── */
 .form-group {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 .form-label {
-  font-size: 13px;
-  font-weight: 500;
+  font-family: var(--font-display);
+  font-size: 13.5px;
   color: var(--text-secondary);
   letter-spacing: 0.02em;
 }
 .form-input {
-  background: rgba(255,255,255,0.05);
+  background: var(--bg-inset);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-sm);
   color: var(--text-primary);
-  font-family: var(--font-sans);
+  font-family: var(--font-serif);
   font-size: 15px;
   padding: 11px 14px;
   transition: border-color var(--transition), box-shadow var(--transition);
@@ -157,25 +254,31 @@ body {
 }
 .form-input:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-glow);
+  box-shadow: 0 0 0 2px var(--accent-glow);
 }
-.form-input::placeholder { color: var(--text-muted); }
+.form-input::placeholder {
+  color: var(--text-muted);
+  font-style: italic;
+  font-family: var(--font-hand);
+  font-size: 16px;
+}
 
-/* ─── Tags ────────────────────────────────────── */
+/* ─── Ink Stamp Tags ──────────────────────────── */
 .tag {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 4px 11px;
-  border-radius: 20px;
-  font-size: 12px;
+  padding: 2px 9px;
+  border-radius: 3px;
+  font-family: var(--font-hand);
+  font-size: 14px;
   font-weight: 600;
-  background: rgba(99, 102, 241, 0.12);
-  color: var(--text-accent);
-  border: 1px solid rgba(99, 102, 241, 0.2);
+  background: rgba(107, 62, 38, 0.09);
+  color: var(--accent);
+  border: 1px dashed rgba(107, 62, 38, 0.35);
 }
 
-/* ─── Spinner ─────────────────────────────────── */
+/* ─── Spinner & Animations ────────────────────── */
 @keyframes spin { to { transform: rotate(360deg); } }
 .spinner {
   width: 20px;
@@ -183,41 +286,18 @@ body {
   border: 2px solid var(--glass-border);
   border-top-color: var(--accent);
   border-radius: 50%;
-  animation: spin 0.7s linear infinite;
+  animation: spin 0.8s linear infinite;
 }
 
-/* ─── Fade in ─────────────────────────────────── */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
+  from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 .fade-in { animation: fadeIn 0.35s ease forwards; }
 
-/* ─── Gradient background decoration ─────────── */
-.bg-decoration {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
-}
-.bg-decoration::before {
-  content: '';
-  position: absolute;
-  top: -20%;
-  left: -10%;
-  width: 600px;
-  height: 600px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%);
-}
-.bg-decoration::after {
-  content: '';
-  position: absolute;
-  bottom: -10%;
-  right: -10%;
-  width: 500px;
-  height: 500px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(124,58,237,0.1) 0%, transparent 70%);
+/* Handwriting class */
+.handwritten {
+  font-family: var(--font-hand);
+  font-size: 1.15em;
+  letter-spacing: 0.01em;
 }

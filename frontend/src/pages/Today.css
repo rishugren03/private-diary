@@ -1,45 +1,61 @@
 .today-page { display: flex; flex-direction: column; gap: 28px; }
 
+/* Header */
 .today-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 16px;
+  border-bottom: 2px solid var(--margin-line);
+  padding-bottom: 12px;
 }
 
 .today-greeting {
-  font-size: 14px;
-  color: var(--text-muted);
-  margin-bottom: 4px;
+  font-family: var(--font-hand);
+  font-size: 18px;
+  color: var(--accent);
+  margin-bottom: 2px;
 }
 
 .today-date {
   font-family: var(--font-display);
-  font-size: clamp(22px, 3vw, 30px);
-  font-weight: 700;
+  font-size: clamp(24px, 3.2vw, 34px);
+  font-weight: 600;
+  font-style: italic;
   color: var(--text-primary);
-  letter-spacing: -0.02em;
 }
 
 .today-thought-badge {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 13px;
+  font-family: var(--font-hand);
+  font-size: 14px;
   font-weight: 600;
-  color: var(--accent-light);
-  background: rgba(99,102,241,0.1);
-  border: 1px solid rgba(99,102,241,0.2);
-  padding: 8px 14px;
-  border-radius: 20px;
+  color: var(--accent);
+  background: var(--bg-inset);
+  border: 1px dashed var(--glass-border);
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
 }
 
-/* Composer Card */
+/* ─── Composer (Lined Writing Pad) ─────────────── */
 .composer-card {
-  padding: 22px 24px;
+  padding: 24px 28px;
   display: flex;
   flex-direction: column;
   gap: 16px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--paper-shadow);
+  /* Lined paper ruling lines */
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent calc(1.75em - 1px),
+    var(--rule-line) calc(1.75em - 1px),
+    var(--rule-line) 1.75em
+  );
 }
 
 .composer-header {
@@ -48,44 +64,47 @@
   gap: 8px;
 }
 
-.composer-sparkle { color: var(--accent-light); }
+.composer-sparkle { color: var(--gold-foil); }
 
 .composer-title {
-  font-size: 14px;
-  font-weight: 600;
+  font-family: var(--font-title);
+  font-size: 13.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--text-primary);
 }
 
 .composer-hint {
-  font-size: 12px;
+  font-family: var(--font-hand);
+  font-size: 15px;
   color: var(--text-muted);
   margin-left: auto;
 }
 
 .composer-textarea {
   width: 100%;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-md);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--accent);
   color: var(--text-primary);
-  font-family: var(--font-sans);
-  font-size: 15px;
-  font-weight: 400;
-  line-height: 1.6;
-  letter-spacing: -0.01em;
-  padding: 14px 18px;
+  font-family: var(--font-serif);
+  font-size: 16px;
+  line-height: 1.75;
+  padding: 8px 0;
   outline: none;
   resize: vertical;
-  transition: border-color var(--transition), box-shadow var(--transition);
+  transition: border-color var(--transition);
 }
 
 .composer-textarea:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-glow);
+  border-bottom-color: var(--gold-foil);
 }
 
 .composer-textarea::placeholder {
   color: var(--text-muted);
+  font-style: italic;
+  font-family: var(--font-hand);
+  font-size: 18px;
 }
 
 .composer-toolbar {
@@ -104,7 +123,7 @@
   flex: 1;
 }
 
-/* Timeline */
+/* ─── Timeline (Manuscript Stream) ─────────────── */
 .timeline-section {
   display: flex;
   flex-direction: column;
@@ -112,25 +131,28 @@
 }
 
 .timeline-heading {
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--text-secondary);
-  letter-spacing: 0.02em;
+  font-family: var(--font-title);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
 .timeline-empty {
-  padding: 36px 24px;
+  padding: 44px 24px;
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   color: var(--text-muted);
-  font-size: 14px;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 16px;
 }
 
 .timeline-list {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
 }

@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useDiary } from '../contexts/DiaryContext';
+import { useTheme } from '../contexts/ThemeContext';
 import { getAllEntriesLocal } from '../lib/localDb';
 import { format, parseISO } from 'date-fns';
-import { User, Download, LogOut, Shield } from 'lucide-react';
+import { User, Download, LogOut, Shield, Sun, Moon, Clock, Palette } from 'lucide-react';
 import './Settings.css';
 
 export default function Settings() {
   const { user, logout } = useAuth();
   const { entries } = useDiary();
+  const { mode, setMode, activeTheme } = useTheme();
   const [exporting, setExporting] = useState(false);
 
   const entryCount = Object.keys(entries).length;
@@ -49,6 +51,50 @@ export default function Settings() {
   return (
     <div className="settings-page">
       <h1 className="settings-title">Settings</h1>
+
+      <section className="settings-section glass-card">
+        <div className="settings-section-header">
+          <Palette size={18} />
+          <h2>Appearance & Theme</h2>
+        </div>
+        <p className="settings-export-note">
+          Automatically adjusts theme based on time of day (6 AM – 6 PM: Light Parchment, 6 PM – 6 AM: Night Espresso).
+        </p>
+        <div className="theme-options">
+          <button
+            className={`theme-option-btn ${mode === 'auto' ? 'active' : ''}`}
+            onClick={() => setMode('auto')}
+          >
+            <Clock size={16} />
+            <div className="theme-option-text">
+              <span className="theme-option-title">Auto Day/Night</span>
+              <span className="theme-option-desc">Current: {activeTheme === 'dark' ? 'Night Mode' : 'Day Mode'}</span>
+            </div>
+          </button>
+
+          <button
+            className={`theme-option-btn ${mode === 'light' ? 'active' : ''}`}
+            onClick={() => setMode('light')}
+          >
+            <Sun size={16} />
+            <div className="theme-option-text">
+              <span className="theme-option-title">Vintage Paper</span>
+              <span className="theme-option-desc">Light Sepia</span>
+            </div>
+          </button>
+
+          <button
+            className={`theme-option-btn ${mode === 'dark' ? 'active' : ''}`}
+            onClick={() => setMode('dark')}
+          >
+            <Moon size={16} />
+            <div className="theme-option-text">
+              <span className="theme-option-title">Espresso Night</span>
+              <span className="theme-option-desc">Dark Amber</span>
+            </div>
+          </button>
+        </div>
+      </section>
 
       <section className="settings-section glass-card">
         <div className="settings-section-header">

@@ -1,7 +1,8 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useDiary } from '../contexts/DiaryContext';
-import { BookOpen, CalendarDays, Search, Settings, LogOut, PenLine } from 'lucide-react';
+import { useTheme } from '../contexts/ThemeContext';
+import { BookOpen, CalendarDays, Search, Settings, LogOut, PenLine, Sun, Moon, Clock } from 'lucide-react';
 import { format } from 'date-fns';
 import './Sidebar.css';
 
@@ -10,6 +11,7 @@ const TODAY = format(new Date(), 'yyyy-MM-dd');
 export default function Sidebar() {
   const { user, logout } = useAuth();
   const { entries } = useDiary();
+  const { mode, setMode, activeTheme } = useTheme();
   const navigate = useNavigate();
 
   // "On this day" — thoughts from same month-day in previous years
@@ -34,6 +36,22 @@ export default function Sidebar() {
     { to: '/search', icon: Search, label: 'Search' },
     { to: '/settings', icon: Settings, label: 'Settings' },
   ];
+
+  const cycleTheme = () => {
+    if (mode === 'auto') setMode('light');
+    else if (mode === 'light') setMode('dark');
+    else setMode('auto');
+  };
+
+  const getThemeIcon = () => {
+    if (mode === 'auto') return <Clock size={15} />;
+    return activeTheme === 'dark' ? <Moon size={15} /> : <Sun size={15} />;
+  };
+
+  const getThemeLabel = () => {
+    if (mode === 'auto') return `Auto (${activeTheme === 'dark' ? 'Night' : 'Day'})`;
+    return mode === 'dark' ? 'Night' : 'Day';
+  };
 
   return (
     <aside className="sidebar">
@@ -72,6 +90,17 @@ export default function Sidebar() {
           ))}
         </div>
       )}
+
+      <div className="sidebar-theme-toggle">
+        <button
+          className="sidebar-theme-btn"
+          onClick={cycleTheme}
+          title="Click to toggle between Auto (Day/Night time switch), Light, or Dark mode"
+        >
+          {getThemeIcon()}
+          <span>{getThemeLabel()}</span>
+        </button>
+      </div>
 
       <div className="sidebar-footer">
         <div className="sidebar-user">

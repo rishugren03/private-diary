@@ -1,53 +1,62 @@
-/* Login page */
+/* ══════════════════════════════════════════════════════════════
+   Login Page — Locked Antique Leather Journal Aesthetic
+ ══════════════════════════════════════════════════════════════ */
+
 .login-page {
   display: flex;
   height: 100vh;
   position: relative;
   overflow: hidden;
+  background-color: var(--bg-desk);
 }
 
-/* Left panel */
+/* Left panel — Journal Cover / Intro */
 .login-left {
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 48px 56px;
-  background: linear-gradient(160deg, rgba(99,102,241,0.06) 0%, transparent 60%);
-  border-right: 1px solid var(--glass-border);
+  background: var(--bg-spine);
+  border-right: 4px double var(--bg-spine-border);
   position: relative;
   z-index: 1;
+  box-shadow: 6px 0 25px rgba(0,0,0,0.5);
 }
 
 .login-logo {
   display: flex;
   align-items: center;
   gap: 10px;
-  color: var(--accent-light);
-  font-size: 18px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  color: var(--text-gold);
+  font-family: var(--font-title);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 .login-hero { flex: 1; display: flex; flex-direction: column; justify-content: center; }
 
 .login-headline {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: clamp(36px, 4vw, 52px);
+  font-family: var(--font-display);
+  font-size: clamp(34px, 4vw, 50px);
   font-weight: 600;
-  line-height: 1.15;
-  color: var(--text-primary);
+  line-height: 1.2;
+  color: var(--text-on-dark);
   margin-bottom: 20px;
 }
 .login-headline em {
   font-style: italic;
-  color: var(--accent-light);
+  color: var(--gold-foil);
 }
 
 .login-sub {
+  font-family: var(--font-serif);
   font-size: 15px;
-  color: var(--text-secondary);
-  line-height: 1.7;
+  font-style: italic;
+  color: var(--text-muted);
+  line-height: 1.8;
   max-width: 420px;
   margin-bottom: 36px;
 }
@@ -58,27 +67,40 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  font-family: var(--font-serif);
   font-size: 14px;
   color: var(--text-secondary);
 }
-.login-feature svg { color: var(--accent-light); flex-shrink: 0; }
+.login-feature svg { color: var(--gold-foil); flex-shrink: 0; }
 
 .login-quote {
-  font-size: 12px;
-  color: var(--text-muted);
-  max-width: 380px;
+  font-family: var(--font-hand);
+  font-size: 16px;
+  color: var(--gold-foil);
+  max-width: 400px;
   line-height: 1.7;
 }
 
-/* Right panel */
+/* Right panel — Open Parchment Page for Credentials */
 .login-right {
-  width: 420px;
+  width: 460px;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 40px 32px;
   position: relative;
   z-index: 1;
+  background: var(--bg-base);
+  /* Lined notebook page pattern */
+  background-image:
+    linear-gradient(90deg, transparent 40px, var(--margin-line) 40px, var(--margin-line) 42px, transparent 42px),
+    repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent calc(1.75em - 1px),
+      var(--rule-line) calc(1.75em - 1px),
+      var(--rule-line) 1.75em
+    );
 }
 
 .login-card {
@@ -87,14 +109,20 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
 }
 
 .login-card-header h2 {
-  font-size: 22px;
+  font-family: var(--font-display);
+  font-size: 24px;
   font-weight: 600;
   margin-bottom: 6px;
+  color: var(--text-primary);
 }
-.text-muted { font-size: 13px; color: var(--text-secondary); }
+.text-muted { font-family: var(--font-serif); font-size: 13.5px; color: var(--text-muted); }
 
 .login-form { display: flex; flex-direction: column; gap: 18px; }
 
@@ -112,15 +140,15 @@
   padding: 4px;
   display: flex;
 }
-.input-icon-btn:hover { color: var(--text-secondary); }
+.input-icon-btn:hover { color: var(--text-primary); }
 
 .form-label-hint { color: var(--text-muted); font-weight: 400; }
 
 .form-error {
   font-size: 13px;
   color: var(--error);
-  background: rgba(239,68,68,0.08);
-  border: 1px solid rgba(239,68,68,0.2);
+  background: rgba(156,58,46,0.08);
+  border: 1px solid rgba(156,58,46,0.25);
   border-radius: var(--radius-sm);
   padding: 10px 14px;
 }
@@ -131,16 +159,18 @@
   display: flex;
   justify-content: center;
   gap: 6px;
+  font-family: var(--font-serif);
   font-size: 13px;
   color: var(--text-muted);
 }
 .link-btn {
   background: none;
   border: none;
-  color: var(--accent-light);
+  color: var(--accent);
   cursor: pointer;
   font-size: 13px;
-  font-family: inherit;
+  font-family: var(--font-title);
+  letter-spacing: 0.04em;
   padding: 0;
 }
 .link-btn:hover { text-decoration: underline; }
@@ -151,8 +181,8 @@
   gap: 8px;
   font-size: 12px;
   color: var(--warning);
-  background: rgba(245,158,11,0.08);
-  border: 1px solid rgba(245,158,11,0.2);
+  background: rgba(156,114,37,0.08);
+  border: 1px solid rgba(156,114,37,0.2);
   border-radius: var(--radius-sm);
   padding: 12px 14px;
   line-height: 1.5;

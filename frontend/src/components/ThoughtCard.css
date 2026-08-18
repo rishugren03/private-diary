@@ -1,16 +1,26 @@
+/* ══════════════════════════════════════════════════════════════
+   ThoughtCard — Handwritten Entry on Manuscript Page
+ ══════════════════════════════════════════════════════════════ */
+
 .thought-card {
-  padding: 18px 22px;
+  padding: 20px 24px;
   display: flex;
   flex-direction: column;
   gap: 12px;
   position: relative;
-  transition: transform var(--transition), border-color var(--transition);
+  background: var(--bg-elevated);
+  border: 1px solid var(--glass-border);
+  border-left: 4px solid var(--accent);
+  box-shadow: var(--paper-shadow);
+  transition: all var(--transition);
 }
 
 .thought-card:hover {
-  border-color: rgba(99,102,241,0.25);
+  border-left-color: var(--gold-foil);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.18);
 }
 
+/* Header */
 .thought-card-header {
   display: flex;
   align-items: center;
@@ -23,13 +33,13 @@
   gap: 8px;
 }
 
-.thought-clock-icon { color: var(--accent-light); }
+.thought-clock-icon { color: var(--accent); opacity: 0.75; }
 
 .thought-time {
-  font-size: 12px;
+  font-family: var(--font-hand);
+  font-size: 16px;
   font-weight: 600;
-  color: var(--accent-light);
-  letter-spacing: 0.02em;
+  color: var(--accent);
 }
 
 .thought-mood {
@@ -41,7 +51,7 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  opacity: 0.5;
+  opacity: 0;
   transition: opacity var(--transition);
 }
 
@@ -69,16 +79,15 @@
 
 .btn-icon-subtle.danger:hover {
   color: var(--error);
-  background: rgba(239,68,68,0.12);
+  background: rgba(156,58,46,0.12);
 }
 
+/* Body — Classic Manuscript Body Text */
 .thought-card-body {
-  font-family: var(--font-sans);
-  font-size: 15px;
-  font-weight: 400;
-  line-height: 1.65;
+  font-family: var(--font-serif);
+  font-size: 16px;
+  line-height: 1.75;
   color: var(--text-primary);
-  letter-spacing: -0.01em;
   white-space: pre-wrap;
   word-break: break-word;
 }
@@ -87,22 +96,24 @@
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+  margin-top: 4px;
 }
 
 /* Editing state */
 .thought-card.editing {
-  border-color: var(--accent);
+  border-color: var(--gold-foil);
+  border-left-color: var(--gold-foil);
 }
 
 .thought-edit-actions { display: flex; align-items: center; gap: 6px; }
 
 .btn.small {
-  padding: 6px 12px;
-  font-size: 12px;
+  padding: 5px 12px;
+  font-size: 11px;
 }
 
 .btn.icon-btn.small {
-  padding: 6px;
+  padding: 5px;
 }
 
 .thought-edit-body {
@@ -113,19 +124,21 @@
 
 .thought-edit-textarea {
   width: 100%;
-  background: rgba(255,255,255,0.04);
+  background: var(--bg-inset);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-sm);
   color: var(--text-primary);
-  font-family: var(--font-sans);
+  font-family: var(--font-serif);
   font-size: 15px;
   padding: 10px 14px;
   outline: none;
   resize: vertical;
+  line-height: 1.7;
 }
 
 .thought-edit-textarea:focus {
   border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-glow);
 }
 
 .thought-edit-row {

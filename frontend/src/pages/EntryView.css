@@ -4,29 +4,29 @@
   display: flex;
   align-items: center;
   gap: 16px;
+  border-bottom: 2px solid var(--margin-line);
+  padding-bottom: 12px;
 }
 
 .entry-date {
-  font-family: 'Playfair Display', serif;
-  font-size: 24px;
+  font-family: var(--font-display);
+  font-size: 26px;
   font-weight: 600;
+  font-style: italic;
+  color: var(--text-primary);
   flex: 1;
 }
 
-.entry-actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+.entry-actions { display: flex; align-items: center; gap: 10px; }
 
 .save-status {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 12px;
+  font-family: var(--font-hand);
+  font-size: 15px;
   color: var(--text-muted);
 }
-
 .save-status.saved { color: var(--success); }
 
 .saved-dot {
@@ -36,11 +36,7 @@
   background: var(--success);
 }
 
-.spinner.small {
-  width: 12px;
-  height: 12px;
-  border-width: 1.5px;
-}
+.spinner.small { width: 12px; height: 12px; border-width: 1.5px; }
 
 .entry-mood-row,
 .entry-tags-row {
@@ -51,8 +47,10 @@
 }
 
 .section-label {
-  font-size: 13px;
-  font-weight: 500;
+  font-family: var(--font-title);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   color: var(--text-secondary);
   min-width: 60px;
 }
