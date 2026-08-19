@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { format, parseISO } from 'date-fns';
 import { useDiary } from '../contexts/DiaryContext';
@@ -11,15 +11,25 @@ import './EntryView.css';
 export default function EntryView() {
   const { date } = useParams();
   const navigate = useNavigate();
-  const { entries, addThought, updateThought, deleteThought, deleteEntry } = useDiary();
+  const { entries, loadEntry, addThought, updateThought, deleteThought, deleteEntry } = useDiary();
 
   const [text, setText] = useState('');
   const [mood, setMood] = useState(null);
   const [tags, setTags] = useState([]);
   const [adding, setAdding] = useState(false);
+  const [fetching, setFetching] = useState(false);
+
+  // If this date's entry isn't in memory yet, fetch it from the server
+  useEffect(() => {
+    if (!entries[date]) {
+      setFetching(true);
+      loadEntry(date).finally(() => setFetching(false));
+    }
+  }, [date]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const entry = entries[date];
   const thoughts = entry?.thoughts || [];
+
 
   const handleAddThought = async (e) => {
     e?.preventDefault();
@@ -91,7 +101,12 @@ export default function EntryView() {
       {/* Timeline Stream */}
       <div className="timeline-section">
         <h2 className="timeline-heading">Thoughts Timeline ({thoughts.length})</h2>
-        {thoughts.length === 0 ? (
+        {fetching ? (
+          <div className="timeline-empty glass-card" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <span className="spinner" />
+            <span>Loading thoughts…</span>
+          </div>
+        ) : thoughts.length === 0 ? (
           <div className="timeline-empty glass-card">
             No thoughts recorded for this date.
           </div>

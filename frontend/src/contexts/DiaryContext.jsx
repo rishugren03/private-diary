@@ -37,6 +37,28 @@ export function DiaryProvider({ children }) {
     }
   }, [encKey]);
 
+  // Load (or refresh) a single date's entry from the server
+  const loadEntry = useCallback(async (date) => {
+    if (!encKey) return null;
+    try {
+      const { data } = await api.get(`/entries/${date}`);
+      if (!data || !data.iv) return null; // no entry for this date
+      const plaintext = await decrypt(encKey, data.iv, data.encryptedData);
+      const parsed = JSON.parse(plaintext);
+      const normalized = normalizeEntry(parsed);
+      const entry = { ...normalized, date, updatedAt: data.updatedAt };
+      setEntries((prev) => ({ ...prev, [date]: entry }));
+      await saveEntryLocal({ date, ...normalized, updatedAt: data.updatedAt });
+      return entry;
+    } catch (err) {
+      // 404 = no entry for this date, anything else is a real error
+      if (err?.response?.status !== 404) {
+        console.error('loadEntry error:', err);
+      }
+      return null;
+    }
+  }, [encKey]);
+
   // Internal helper to persist a date's thoughts array to server + localDb
   const _persistDayThoughts = useCallback(async (date, thoughts) => {
     if (!encKey) throw new Error('No encryption key');
@@ -110,6 +132,7 @@ export function DiaryProvider({ children }) {
         entries,
         loaded,
         loadAllEntries,
+        loadEntry,
         addThought,
         updateThought,
         deleteThought,
