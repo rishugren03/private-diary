@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { deriveKey, exportKeyB64, importKeyB64, createKeyVerifier, verifyKey } from '../lib/crypto';
+import { deriveKey, hashPasswordForAuth, createKeyVerifier, verifyKey, encrypt, decrypt } from '../lib/crypto';
 import { clearLocalDB } from '../lib/localDb';
 import api from '../lib/api';
 
@@ -9,34 +9,18 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
     try { return JSON.parse(localStorage.getItem('diary_user')); } catch { return null; }
   });
-  const [encKey, setEncKey] = useState(null); // AES-GCM CryptoKey — preserved in sessionStorage
-  const [keyLoading, setKeyLoading] = useState(true);
-
-  // Restore encryption key from sessionStorage on initial page load / F5 refresh
-  useEffect(() => {
-    async function restoreKey() {
-      try {
-        const cachedB64 = sessionStorage.getItem('diary_enc_key');
-        if (cachedB64) {
-          const key = await importKeyB64(cachedB64);
-          setEncKey(key);
-        }
-      } catch (err) {
-        console.warn('Failed to restore cached session key:', err);
-      } finally {
-        setKeyLoading(false);
-      }
-    }
-    restoreKey();
-  }, []);
+  const [encKey, setEncKey] = useState(null); // AES-GCM CryptoKey — memory only, non-extractable
+  const [keyLoading, setKeyLoading] = useState(false); // no async restore needed anymore
 
   const login = useCallback(async (email, password) => {
-    const { data } = await api.post('/auth/login', { email, password });
+    // SECURITY: Hash password client-side — server never sees the raw password
+    const authHash = await hashPasswordForAuth(password);
+    const { data } = await api.post('/auth/login', { email, password: authHash });
     localStorage.setItem('diary_token', data.token);
     localStorage.setItem('diary_user', JSON.stringify(data.user));
     setUser(data.user);
 
-    // Derive AES key from password + server salt
+    // Derive AES key from raw password + server salt (key never leaves browser)
     const key = await deriveKey(password, data.user.keySalt);
     setEncKey(key);
 
@@ -46,21 +30,15 @@ export function AuthProvider({ children }) {
       localStorage.setItem('diary_key_verifier', verifier);
     } catch (e) {
       console.warn('Key verifier creation warning:', e);
-    }
-
-    // Cache key in sessionStorage so F5 browser refresh never loses key state
-    try {
-      const b64 = await exportKeyB64(key);
-      sessionStorage.setItem('diary_enc_key', b64);
-    } catch (e) {
-      console.warn('Session key export warning:', e);
     }
 
     return data.user;
   }, []);
 
   const register = useCallback(async (email, password, displayName) => {
-    const { data } = await api.post('/auth/register', { email, password, displayName });
+    // SECURITY: Hash password client-side — server never sees the raw password
+    const authHash = await hashPasswordForAuth(password);
+    const { data } = await api.post('/auth/register', { email, password: authHash, displayName });
     localStorage.setItem('diary_token', data.token);
     localStorage.setItem('diary_user', JSON.stringify(data.user));
     setUser(data.user);
@@ -76,17 +54,10 @@ export function AuthProvider({ children }) {
       console.warn('Key verifier creation warning:', e);
     }
 
-    try {
-      const b64 = await exportKeyB64(key);
-      sessionStorage.setItem('diary_enc_key', b64);
-    } catch (e) {
-      console.warn('Session key export warning:', e);
-    }
-
     return data.user;
   }, []);
 
-  // Unlock helper if encKey is missing on a fresh tab session
+  // Unlock helper if encKey is missing (e.g. after page refresh — key is memory-only now)
   const unlock = useCallback(async (password) => {
     if (!user || !user.keySalt) throw new Error('No user session found');
 
@@ -100,7 +71,6 @@ export function AuthProvider({ children }) {
       // Clear stale session data and require the user to log in properly
       localStorage.removeItem('diary_token');
       localStorage.removeItem('diary_user');
-      sessionStorage.removeItem('diary_enc_key');
       setUser(null);
       setEncKey(null);
       await clearLocalDB();
@@ -111,28 +81,78 @@ export function AuthProvider({ children }) {
     await verifyKey(key, verifier);
 
     setEncKey(key);
-    try {
-      const b64 = await exportKeyB64(key);
-      sessionStorage.setItem('diary_enc_key', b64);
-    } catch (e) {
-      console.warn('Session key export warning:', e);
-    }
-
     return key;
   }, [user]);
+
+  // Change password: re-encrypt all entries with a new key
+  const changePassword = useCallback(async (oldPassword, newPassword, allEntries) => {
+    if (!user || !encKey) throw new Error('Not authenticated');
+
+    // 1. Verify old password
+    const oldAuthHash = await hashPasswordForAuth(oldPassword);
+    const newAuthHash = await hashPasswordForAuth(newPassword);
+
+    // 2. Generate new salt (32 random bytes as base64)
+    const newSaltArray = crypto.getRandomValues(new Uint8Array(32));
+    const newKeySalt = btoa(String.fromCharCode(...newSaltArray));
+
+    // 3. Derive new encryption key
+    const newKey = await deriveKey(newPassword, newKeySalt);
+
+    // 4. Re-encrypt all entries with the new key
+    const reEncryptedEntries = [];
+    for (const [date, entry] of Object.entries(allEntries)) {
+      if (entry.thoughts && entry.thoughts.length > 0) {
+        const payload = JSON.stringify({ thoughts: entry.thoughts });
+        const { iv, ciphertext: encryptedData } = await encrypt(newKey, payload);
+        reEncryptedEntries.push({ date, iv, encryptedData });
+      }
+    }
+
+    // 5. Send everything to server in one atomic request
+    const { data } = await api.post('/auth/change-password', {
+      oldAuthHash,
+      newAuthHash,
+      newKeySalt,
+      entries: reEncryptedEntries,
+    });
+
+    // 6. Update local state
+    localStorage.setItem('diary_token', data.token);
+    const updatedUser = { ...user, keySalt: newKeySalt };
+    localStorage.setItem('diary_user', JSON.stringify(updatedUser));
+    setUser(updatedUser);
+    setEncKey(newKey);
+
+    // 7. Update key verifier
+    const verifier = await createKeyVerifier(newKey);
+    localStorage.setItem('diary_key_verifier', verifier);
+
+    return updatedUser;
+  }, [user, encKey]);
+
+  // Delete account and all data
+  const deleteAccount = useCallback(async () => {
+    await api.delete('/auth/account');
+    localStorage.removeItem('diary_token');
+    localStorage.removeItem('diary_user');
+    localStorage.removeItem('diary_key_verifier');
+    setUser(null);
+    setEncKey(null);
+    await clearLocalDB();
+  }, []);
 
   const logout = useCallback(async () => {
     localStorage.removeItem('diary_token');
     localStorage.removeItem('diary_user');
     localStorage.removeItem('diary_key_verifier');
-    sessionStorage.removeItem('diary_enc_key');
     setUser(null);
     setEncKey(null);
     await clearLocalDB();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, encKey, keyLoading, login, register, unlock, logout }}>
+    <AuthContext.Provider value={{ user, encKey, keyLoading, login, register, unlock, logout, changePassword, deleteAccount }}>
       {children}
     </AuthContext.Provider>
   );

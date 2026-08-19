@@ -1,6 +1,5 @@
 import { createContext, useContext, useState, useCallback } from 'react';
 import { encrypt, decrypt } from '../lib/crypto';
-import { saveEntryLocal, deleteEntryLocal } from '../lib/localDb';
 import { normalizeEntry } from '../lib/entryUtils';
 import api from '../lib/api';
 import { useAuth } from './AuthContext';
@@ -10,10 +9,11 @@ const DiaryContext = createContext(null);
 export function DiaryProvider({ children }) {
   const { encKey } = useAuth();
   // Map of date (YYYY-MM-DD) → normalized entry object { thoughts: [...], date, updatedAt }
+  // SECURITY: Decrypted entries are kept in memory ONLY — never persisted to disk/IndexedDB
   const [entries, setEntries] = useState({});
   const [loaded, setLoaded] = useState(false);
 
-  // Load all entries from server, decrypt, cache locally
+  // Load all entries from server, decrypt, keep in memory only
   const loadAllEntries = useCallback(async () => {
     if (!encKey) return;
     try {
@@ -25,7 +25,6 @@ export function DiaryProvider({ children }) {
           const parsed = JSON.parse(plaintext);
           const normalized = normalizeEntry(parsed);
           decrypted[e.date] = { ...normalized, date: e.date, updatedAt: e.updatedAt };
-          await saveEntryLocal({ date: e.date, ...normalized, updatedAt: e.updatedAt });
         } catch {
           // Skip entries we can't decrypt
         }
@@ -48,7 +47,6 @@ export function DiaryProvider({ children }) {
       const normalized = normalizeEntry(parsed);
       const entry = { ...normalized, date, updatedAt: data.updatedAt };
       setEntries((prev) => ({ ...prev, [date]: entry }));
-      await saveEntryLocal({ date, ...normalized, updatedAt: data.updatedAt });
       return entry;
     } catch (err) {
       // 404 = no entry for this date, anything else is a real error
@@ -59,7 +57,7 @@ export function DiaryProvider({ children }) {
     }
   }, [encKey]);
 
-  // Internal helper to persist a date's thoughts array to server + localDb
+  // Internal helper to persist a date's thoughts array to server
   const _persistDayThoughts = useCallback(async (date, thoughts) => {
     if (!encKey) throw new Error('No encryption key');
     const payload = JSON.stringify({ thoughts });
@@ -68,7 +66,6 @@ export function DiaryProvider({ children }) {
 
     const entry = { date, thoughts, updatedAt: new Date().toISOString() };
     setEntries((prev) => ({ ...prev, [date]: entry }));
-    await saveEntryLocal(entry);
     return entry;
   }, [encKey]);
 
@@ -109,7 +106,6 @@ export function DiaryProvider({ children }) {
         delete next[date];
         return next;
       });
-      await deleteEntryLocal(date);
     } else {
       await _persistDayThoughts(date, updatedThoughts);
     }
@@ -123,7 +119,6 @@ export function DiaryProvider({ children }) {
       delete next[date];
       return next;
     });
-    await deleteEntryLocal(date);
   }, []);
 
   return (
