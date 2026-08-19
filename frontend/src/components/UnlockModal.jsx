@@ -18,7 +18,11 @@ export default function UnlockModal() {
       await unlock(password);
     } catch (err) {
       console.error(err);
-      setError('Incorrect password or key derivation error.');
+      if (err?.message?.includes('Session expired')) {
+        setError(err.message);
+      } else {
+        setError('Incorrect password. Please try again.');
+      }
     } finally {
       setLoading(false);
     }

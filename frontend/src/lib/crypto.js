@@ -93,6 +93,33 @@ export async function decrypt(key, ivB64, ciphertextB64) {
   return new TextDecoder().decode(plaintextBuffer);
 }
 
+// ─── key verification sentinel ──────────────────────────────────────────────
+
+/**
+ * Encrypt a known sentinel value with the given key.
+ * Store the returned JSON in localStorage so unlock() can verify future passwords.
+ * @param {CryptoKey} key
+ * @returns {Promise<string>} JSON string { iv, ciphertext }
+ */
+export async function createKeyVerifier(key) {
+  const result = await encrypt(key, 'memoria-key-ok');
+  return JSON.stringify(result);
+}
+
+/**
+ * Attempt to decrypt & verify the stored sentinel.
+ * Throws if the key is wrong (i.e. wrong password was entered).
+ * @param {CryptoKey} key
+ * @param {string} verifierJson  JSON string produced by createKeyVerifier()
+ */
+export async function verifyKey(key, verifierJson) {
+  const { iv, ciphertext } = JSON.parse(verifierJson);
+  const plaintext = await decrypt(key, iv, ciphertext);
+  if (plaintext !== 'memoria-key-ok') {
+    throw new Error('Key verification failed: sentinel mismatch');
+  }
+}
+
 // ─── helpers ────────────────────────────────────────────────────────────────
 
 function bufferToBase64(buffer) {
