@@ -58,9 +58,87 @@
     display: flex;
   }
 }
-/* Light mode text adjustments */
+/* ─── Light Mode Sidebar Overrides ────────────────────────────────────────── */
+/* The sidebar spine is always a dark leather tone, so in light mode we must   */
+/* force readable warm-cream text rather than the dark ink vars designed for   */
+/* use on the parchment paper pages.                                            */
+
+:root[data-theme="light"] .sidebar-logo-brand {
+  color: #D4AF37;                   /* gold embossed — stays gold */
+  text-shadow: 0 1px 3px rgba(0,0,0,0.9);
+}
+
 :root[data-theme="light"] .sidebar-link {
-  color: var(--text-primary);
+  color: #C8B89A;                   /* warm cream — readable on dark leather */
+}
+:root[data-theme="light"] .sidebar-link svg {
+  color: #A89278;
+}
+:root[data-theme="light"] .sidebar-link:hover {
+  background: rgba(255, 255, 255, 0.10);
+  color: #EDE0C8;                   /* brighter cream on hover */
+  border-color: rgba(212, 175, 55, 0.30);
+}
+:root[data-theme="light"] .sidebar-link:hover svg {
+  color: #D4AF37;
+}
+:root[data-theme="light"] .sidebar-link.active {
+  background: rgba(243, 238, 221, 0.14);  /* subtle parchment tint */
+  color: #F0D98A;                         /* bright gold for active label */
+  border-color: rgba(212, 175, 55, 0.40);
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.12), -3px 2px 10px rgba(0,0,0,0.3);
+}
+:root[data-theme="light"] .sidebar-link.active svg {
+  color: #D4AF37;
+}
+
+/* Theme toggle button */
+:root[data-theme="light"] .sidebar-theme-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(212, 175, 55, 0.25);
+  color: #C8B89A;
+}
+:root[data-theme="light"] .sidebar-theme-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #F0D98A;
+  border-color: rgba(212, 175, 55, 0.55);
+}
+
+/* Footer: user name, email, logout */
+:root[data-theme="light"] .sidebar-footer {
+  background: rgba(0, 0, 0, 0.30);
+  border-top-color: rgba(212, 175, 55, 0.20);
+}
+:root[data-theme="light"] .sidebar-user-name {
+  color: #EDE0C8;
+}
+:root[data-theme="light"] .sidebar-user-email {
+  color: #A89278;
+}
+:root[data-theme="light"] .sidebar-logout {
+  color: #A89278;
+}
+:root[data-theme="light"] .sidebar-logout:hover {
+  color: #E88A7A;
+  background: rgba(200, 60, 45, 0.18);
+}
+
+/* On-this-day section */
+:root[data-theme="light"] .on-this-day {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(212, 175, 55, 0.18);
+}
+:root[data-theme="light"] .otd-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(212, 175, 55, 0.22);
+}
+:root[data-theme="light"] .otd-preview {
+  color: #B0A090;
+}
+
+/* Mobile close button */
+:root[data-theme="light"] .sidebar-close-btn {
+  color: #C8B89A;
 }
 
 
