@@ -108,3 +108,51 @@
 .theme-option-text { display: flex; flex-direction: column; gap: 2px; }
 .theme-option-title { font-family: var(--font-display); font-size: 14px; }
 .theme-option-desc { font-family: var(--font-serif); font-size: 11.5px; color: var(--text-muted); }
+
+/* Password Change Form */
+.settings-pw-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.settings-pw-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+.settings-success {
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  background: rgba(34, 139, 34, 0.12);
+  border: 1px solid rgba(34, 139, 34, 0.3);
+  color: #2d7d2d;
+  font-family: var(--font-serif);
+  font-size: 13.5px;
+}
+
+/* Delete Account Danger Zone */
+.settings-danger-zone {
+  border-color: rgba(200, 50, 50, 0.3) !important;
+}
+.settings-danger-zone .settings-section-header {
+  color: #c83232;
+}
+.settings-delete-confirm {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.settings-delete-warning {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: rgba(200, 50, 50, 0.08);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(200, 50, 50, 0.2);
+  color: #c83232;
+  font-family: var(--font-serif);
+  font-size: 13.5px;
+}
+.settings-delete-warning svg { flex-shrink: 0; }

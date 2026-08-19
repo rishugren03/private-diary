@@ -5,6 +5,8 @@
 
 /**
  * Derive a 256-bit AES-GCM key from a passphrase + salt using PBKDF2.
+ * The key is NON-EXTRACTABLE — JS code (including XSS payloads) cannot
+ * read the raw key bytes. It can only be used for encrypt/decrypt operations.
  * @param {string} passphrase  - user's password
  * @param {string} saltB64     - base64-encoded 32-byte salt from server
  */
@@ -29,31 +31,23 @@ export async function deriveKey(passphrase, saltB64) {
     },
     keyMaterial,
     { name: 'AES-GCM', length: 256 },
-    true,         // extractable for session persistence across F5 refresh
+    false,        // NON-EXTRACTABLE — prevents XSS from stealing the key
     ['encrypt', 'decrypt']
   );
 }
 
 /**
- * Export raw AES CryptoKey to Base64 string for sessionStorage caching.
+ * Hash a password with SHA-256 for server-side authentication.
+ * The server receives this hash instead of the raw password, ensuring
+ * it can never derive the user's AES encryption key (which uses the raw password).
+ * @param {string} password - the user's raw password
+ * @returns {Promise<string>} hex-encoded SHA-256 hash
  */
-export async function exportKeyB64(key) {
-  const exported = await crypto.subtle.exportKey('raw', key);
-  return bufferToBase64(new Uint8Array(exported));
-}
-
-/**
- * Import raw Base64 string back into an AES CryptoKey object.
- */
-export async function importKeyB64(b64) {
-  const raw = base64ToBuffer(b64);
-  return crypto.subtle.importKey(
-    'raw',
-    raw,
-    { name: 'AES-GCM', length: 256 },
-    true,
-    ['encrypt', 'decrypt']
-  );
+export async function hashPasswordForAuth(password) {
+  const enc = new TextEncoder();
+  const hashBuffer = await crypto.subtle.digest('SHA-256', enc.encode(password));
+  const hashArray = new Uint8Array(hashBuffer);
+  return Array.from(hashArray).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
 /**
