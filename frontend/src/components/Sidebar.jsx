@@ -2,7 +2,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useDiary } from '../contexts/DiaryContext';
 import { useTheme } from '../contexts/ThemeContext';
-import { BookOpen, CalendarDays, Search, Settings, LogOut, PenLine, Sun, Moon, Clock, X } from 'lucide-react';
+import { BookOpen, CalendarDays, Search, Settings, LogOut, PenLine, Sun, Moon, Clock, X, Library } from 'lucide-react';
 import { format } from 'date-fns';
 import './Sidebar.css';
 
@@ -33,6 +33,7 @@ export default function Sidebar({ isOpen, onClose }) {
   const navItems = [
     { to: '/', icon: PenLine, label: "Today's Stream", end: true },
     { to: '/calendar', icon: CalendarDays, label: 'Calendar' },
+    { to: '/books', icon: Library, label: 'Bookshelf' },
     { to: '/search', icon: Search, label: 'Search' },
     { to: '/settings', icon: Settings, label: 'Settings' },
   ];

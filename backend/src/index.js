@@ -11,6 +11,7 @@ import { fileURLToPath } from 'url';
 
 import authRoutes from './routes/auth.routes.js';
 import entriesRoutes from './routes/entries.routes.js';
+import booksRoutes from './routes/books.routes.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -39,6 +40,7 @@ app.use('/api/entries', rateLimit({
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/entries', entriesRoutes);
+app.use('/api/books', booksRoutes);
 
 // Health check
 app.get('/health', (_, res) => res.json({
