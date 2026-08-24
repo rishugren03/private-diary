@@ -3,6 +3,8 @@ import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import User from '../models/User.js';
 import Entry from '../models/Entry.js';
+import Book from '../models/Book.js';
+import Chapter from '../models/Chapter.js';
 
 function signToken(userId, tokenVersion = 0) {
   return jwt.sign({ userId, tokenVersion }, process.env.JWT_SECRET, {
@@ -113,10 +115,10 @@ export async function me(req, res) {
   }
 }
 
-// POST /api/auth/change-password — atomic password change + re-encryption
+// POST /api/auth/change-password — atomic password change + re-encryption of entries, books, and chapters
 export async function changePassword(req, res) {
   try {
-    const { oldAuthHash, newAuthHash, newKeySalt, entries } = req.body;
+    const { oldAuthHash, newAuthHash, newKeySalt, entries, books, chapters } = req.body;
     if (!oldAuthHash || !newAuthHash || !newKeySalt) {
       return res.status(400).json({ error: 'oldAuthHash, newAuthHash, and newKeySalt are required' });
     }
@@ -154,6 +156,30 @@ export async function changePassword(req, res) {
       }
     }
 
+    // Update re-encrypted books
+    if (books && Array.isArray(books)) {
+      for (const b of books) {
+        if (b.id && b.iv && b.encryptedData) {
+          await Book.updateOne(
+            { _id: b.id, userId: req.userId },
+            { iv: b.iv, encryptedData: b.encryptedData }
+          );
+        }
+      }
+    }
+
+    // Update re-encrypted chapters
+    if (chapters && Array.isArray(chapters)) {
+      for (const ch of chapters) {
+        if (ch.id && ch.iv && ch.encryptedData) {
+          await Chapter.updateOne(
+            { _id: ch.id, userId: req.userId },
+            { iv: ch.iv, encryptedData: ch.encryptedData }
+          );
+        }
+      }
+    }
+
     // Issue new token with updated version
     const token = signToken(user._id, user.tokenVersion);
     res.json({
@@ -166,10 +192,12 @@ export async function changePassword(req, res) {
   }
 }
 
-// DELETE /api/auth/account — delete user and all entries
+// DELETE /api/auth/account — delete user and all associated entries, books, and chapters
 export async function deleteAccount(req, res) {
   try {
     await Entry.deleteMany({ userId: req.userId });
+    await Chapter.deleteMany({ userId: req.userId });
+    await Book.deleteMany({ userId: req.userId });
     await User.findByIdAndDelete(req.userId);
     res.json({ success: true });
   } catch (err) {

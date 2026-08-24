@@ -84,47 +84,93 @@ export function AuthProvider({ children }) {
     return key;
   }, [user]);
 
-  // Change password: re-encrypt all entries with a new key
-  const changePassword = useCallback(async (oldPassword, newPassword, allEntries) => {
+  // Change password: fetch & re-encrypt all user data (entries, books, chapters) with a new key
+  const changePassword = useCallback(async (oldPassword, newPassword) => {
     if (!user || !encKey) throw new Error('Not authenticated');
 
-    // 1. Verify old password
+    // 1. Compute auth hashes
     const oldAuthHash = await hashPasswordForAuth(oldPassword);
     const newAuthHash = await hashPasswordForAuth(newPassword);
 
-    // 2. Generate new salt (32 random bytes as base64)
-    const newSaltArray = crypto.getRandomValues(new Uint8Array(32));
-    const newKeySalt = btoa(String.fromCharCode(...newSaltArray));
-
-    // 3. Derive new encryption key
-    const newKey = await deriveKey(newPassword, newKeySalt);
-
-    // 4. Re-encrypt all entries with the new key
-    const reEncryptedEntries = [];
-    for (const [date, entry] of Object.entries(allEntries)) {
-      if (entry.thoughts && entry.thoughts.length > 0) {
-        const payload = JSON.stringify({ thoughts: entry.thoughts });
-        const { iv, ciphertext: encryptedData } = await encrypt(newKey, payload);
-        reEncryptedEntries.push({ date, iv, encryptedData });
+    // 2. Fetch and decrypt all existing data with current encKey
+    // a) Entries
+    const { data: rawEntries } = await api.get('/entries');
+    const decryptedEntries = [];
+    for (const e of rawEntries) {
+      try {
+        const plaintext = await decrypt(encKey, e.iv, e.encryptedData);
+        decryptedEntries.push({ date: e.date, plaintext });
+      } catch (err) {
+        console.warn(`Failed to decrypt entry ${e.date} during password change:`, err);
       }
     }
 
-    // 5. Send everything to server in one atomic request
+    // b) Books & Chapters
+    const { data: rawBooks } = await api.get('/books');
+    const decryptedBooks = [];
+    const decryptedChapters = [];
+
+    for (const b of rawBooks) {
+      try {
+        const bookPlaintext = await decrypt(encKey, b.iv, b.encryptedData);
+        decryptedBooks.push({ id: b._id, plaintext: bookPlaintext });
+
+        const { data: rawChapters } = await api.get(`/books/${b._id}/chapters`);
+        for (const ch of rawChapters) {
+          try {
+            const chPlaintext = await decrypt(encKey, ch.iv, ch.encryptedData);
+            decryptedChapters.push({ id: ch._id, plaintext: chPlaintext });
+          } catch (err) {
+            console.warn(`Failed to decrypt chapter ${ch._id} during password change:`, err);
+          }
+        }
+      } catch (err) {
+        console.warn(`Failed to decrypt book ${b._id} during password change:`, err);
+      }
+    }
+
+    // 3. Generate new salt and derive new encryption key
+    const newSaltArray = crypto.getRandomValues(new Uint8Array(32));
+    const newKeySalt = btoa(String.fromCharCode(...newSaltArray));
+    const newKey = await deriveKey(newPassword, newKeySalt);
+
+    // 4. Re-encrypt all decrypted items with newKey
+    const reEncryptedEntries = [];
+    for (const item of decryptedEntries) {
+      const { iv, ciphertext: encryptedData } = await encrypt(newKey, item.plaintext);
+      reEncryptedEntries.push({ date: item.date, iv, encryptedData });
+    }
+
+    const reEncryptedBooks = [];
+    for (const item of decryptedBooks) {
+      const { iv, ciphertext: encryptedData } = await encrypt(newKey, item.plaintext);
+      reEncryptedBooks.push({ id: item.id, iv, encryptedData });
+    }
+
+    const reEncryptedChapters = [];
+    for (const item of decryptedChapters) {
+      const { iv, ciphertext: encryptedData } = await encrypt(newKey, item.plaintext);
+      reEncryptedChapters.push({ id: item.id, iv, encryptedData });
+    }
+
+    // 5. Send re-encrypted payloads to server in one atomic request
     const { data } = await api.post('/auth/change-password', {
       oldAuthHash,
       newAuthHash,
       newKeySalt,
       entries: reEncryptedEntries,
+      books: reEncryptedBooks,
+      chapters: reEncryptedChapters,
     });
 
-    // 6. Update local state
+    // 6. Update local storage & state
     localStorage.setItem('diary_token', data.token);
     const updatedUser = { ...user, keySalt: newKeySalt };
     localStorage.setItem('diary_user', JSON.stringify(updatedUser));
     setUser(updatedUser);
     setEncKey(newKey);
 
-    // 7. Update key verifier
+    // 7. Update key verifier for unlock modal
     const verifier = await createKeyVerifier(newKey);
     localStorage.setItem('diary_key_verifier', verifier);
 

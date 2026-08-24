@@ -83,8 +83,8 @@ export default function Settings() {
 
     setPwLoading(true);
     try {
-      await changePassword(pwForm.oldPassword, pwForm.newPassword, entries);
-      setPwSuccess('Password changed successfully! All entries re-encrypted with new key.');
+      await changePassword(pwForm.oldPassword, pwForm.newPassword);
+      setPwSuccess('Password changed successfully! All diary entries, books, and chapters re-encrypted with your new key.');
       setPwForm({ oldPassword: '', newPassword: '', confirmPassword: '' });
       setShowPasswordChange(false);
     } catch (err) {
