@@ -61,7 +61,7 @@ export default function CalendarPage() {
                 key={dateStr}
                 className={`cal-cell ${thoughts.length > 0 ? 'has-entry' : ''} ${isToday(day) ? 'today' : ''} ${!isSameMonth(day, currentDate) ? 'other-month' : ''}`}
                 onClick={() => goToDay(day)}
-                title={thoughts.length > 0 ? `${thoughts.length} thoughts` : undefined}
+                title={thoughts.length > 0 ? `${thoughts.length} entries` : undefined}
               >
                 <span className="cal-day-num">{format(day, 'd')}</span>
                 {thoughts.length > 0 && (

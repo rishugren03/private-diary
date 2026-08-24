@@ -48,7 +48,7 @@ export default function EntryView() {
   };
 
   const handleDeleteAll = async () => {
-    if (!confirm('Delete all thoughts for this date? This cannot be undone.')) return;
+    if (!confirm('Delete all entries for this date? This cannot be undone.')) return;
     await deleteEntry(date);
     navigate('/calendar');
   };
@@ -74,14 +74,14 @@ export default function EntryView() {
       <div className="composer-card glass-card">
         <div className="composer-header">
           <Sparkles size={15} className="composer-sparkle" />
-          <span className="composer-title">Add a thought to this day</span>
+          <span className="composer-title">Add an entry to this day</span>
         </div>
         <textarea
           className="composer-textarea"
-          placeholder="Jot down a thought for this day..."
+          placeholder="Write an entry for this day..."
           value={text}
           onChange={(e) => setText(e.target.value)}
-          rows={3}
+          rows={6}
         />
         <div className="composer-toolbar">
           <div className="composer-meta">
@@ -93,22 +93,22 @@ export default function EntryView() {
             onClick={handleAddThought}
             disabled={!text.trim() || adding}
           >
-            <Plus size={16} /> Add Thought
+            <Plus size={16} /> Add Entry
           </button>
         </div>
       </div>
 
       {/* Timeline Stream */}
       <div className="timeline-section">
-        <h2 className="timeline-heading">Thoughts Timeline ({thoughts.length})</h2>
+        <h2 className="timeline-heading">Diary Entries ({thoughts.length})</h2>
         {fetching ? (
           <div className="timeline-empty glass-card" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             <span className="spinner" />
-            <span>Loading thoughts…</span>
+            <span>Loading entries…</span>
           </div>
         ) : thoughts.length === 0 ? (
           <div className="timeline-empty glass-card">
-            No thoughts recorded for this date.
+            No entries recorded for this date.
           </div>
         ) : (
           <div className="timeline-list">

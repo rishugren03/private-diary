@@ -74,10 +74,10 @@ export default function ThoughtCard({ thought, onUpdate, onDelete }) {
           {thought.mood && <span className="thought-mood">{thought.mood}</span>}
         </div>
         <div className="thought-card-actions">
-          <button className="btn-icon-subtle" onClick={() => setIsEditing(true)} title="Edit thought">
+          <button className="btn-icon-subtle" onClick={() => setIsEditing(true)} title="Edit entry">
             <Edit2 size={13} />
           </button>
-          <button className="btn-icon-subtle danger" onClick={() => onDelete(thought.id)} title="Delete thought">
+          <button className="btn-icon-subtle danger" onClick={() => onDelete(thought.id)} title="Delete entry">
             <Trash2 size={13} />
           </button>
         </div>

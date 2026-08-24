@@ -83,6 +83,7 @@
 
 .composer-textarea {
   width: 100%;
+  min-height: 150px;
   background: transparent;
   border: none;
   border-bottom: 1px solid var(--accent);

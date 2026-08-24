@@ -31,7 +31,7 @@ export default function Sidebar({ isOpen, onClose }) {
   const onThisDay = pastThoughts.slice(0, 2);
 
   const navItems = [
-    { to: '/', icon: PenLine, label: "Today's Stream", end: true },
+    { to: '/', icon: PenLine, label: "Today's Entry", end: true },
     { to: '/calendar', icon: CalendarDays, label: 'Calendar' },
     { to: '/books', icon: Library, label: 'Bookshelf' },
     { to: '/search', icon: Search, label: 'Search' },

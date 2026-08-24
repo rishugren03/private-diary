@@ -59,7 +59,7 @@ export default function Today() {
         </div>
         <div className="today-thought-badge">
           <MessageSquare size={14} />
-          <span>{thoughts.length} {thoughts.length === 1 ? 'thought' : 'thoughts'} logged today</span>
+          <span>{thoughts.length} {thoughts.length === 1 ? 'entry' : 'entries'} logged today</span>
         </div>
       </div>
 
@@ -67,17 +67,17 @@ export default function Today() {
       <div className="composer-card glass-card">
         <div className="composer-header">
           <Sparkles size={15} className="composer-sparkle" />
-          <span className="composer-title">Log a thought</span>
-          <span className="composer-hint">Press Cmd + Enter to add</span>
+          <span className="composer-title">Today's Diary Entry</span>
+          <span className="composer-hint">Press Cmd + Enter to save</span>
         </div>
 
         <textarea
           className="composer-textarea"
-          placeholder="What's on your mind right now? Jot down a thought, feeling, or memory..."
+          placeholder="Dear diary, what happened today? Write your entry..."
           value={text}
           onChange={(e) => setText(e.target.value)}
           onKeyDown={handleKeyDown}
-          rows={3}
+          rows={6}
           autoFocus
         />
 
@@ -96,7 +96,7 @@ export default function Today() {
               <span className="spinner" />
             ) : (
               <>
-                <Plus size={16} /> Add Thought
+                <Plus size={16} /> Add Entry
               </>
             )}
           </button>
@@ -105,12 +105,12 @@ export default function Today() {
 
       {/* Timeline Stream */}
       <div className="timeline-section">
-        <h2 className="timeline-heading">Today's Timeline</h2>
+        <h2 className="timeline-heading">Today's Entries</h2>
 
         {thoughts.length === 0 ? (
           <div className="timeline-empty glass-card">
-            <p>No thoughts logged yet today.</p>
-            <span>Type a thought above and hit <strong>Add Thought</strong> whenever something comes to mind.</span>
+            <p>No entries logged yet today.</p>
+            <span>Write an entry above and hit <strong>Add Entry</strong> to save it to today's diary.</span>
           </div>
         ) : (
           <div className="timeline-list">

@@ -76,8 +76,8 @@ export default function Search() {
   return (
     <div className="search-page">
       <div className="search-header">
-        <h1 className="search-title">Search thoughts</h1>
-        <p className="search-sub">Searched in-memory across all your loaded thoughts — 100% private, nothing on disk.</p>
+        <h1 className="search-title">Search entries</h1>
+        <p className="search-sub">Searched in-memory across all your loaded entries — 100% private, nothing on disk.</p>
       </div>
 
       <div className="search-input-wrapper glass-card">
@@ -85,7 +85,7 @@ export default function Search() {
         <input
           id="search-input"
           className="search-input"
-          placeholder="Search thoughts, keywords, #tags…"
+          placeholder="Search entries, keywords, #tags…"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           autoFocus
@@ -95,7 +95,7 @@ export default function Search() {
       <div className="search-results">
         {matchingThoughts.length === 0 && (
           <div className="search-empty">
-            {query ? 'No thoughts match your search.' : 'No thoughts logged yet.'}
+            {query ? 'No entries match your search.' : 'No entries logged yet.'}
           </div>
         )}
         {matchingThoughts.map((thought) => (
